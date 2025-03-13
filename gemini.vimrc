@@ -136,7 +136,7 @@ endfunction
 " 引数はファイルタイプと関数名
 function! GeminiFuncHelp(ft, funcname)
 	" APIキー（環境変数から取得する場合）
-	let api_key = $GEMINII
+	let api_key = $GEMINI
 
 	" API URL
 	let url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . api_key
@@ -168,6 +168,7 @@ endfunction
 
 " visual modeで選択されたテキストを取得して、APIにリクエストを送信するmapping
 vnoremap <silent> <Leader>g :<C-u>call Gemininglishv()<CR>
+vnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, join(getregion(getpos("v"), getpos("'>")),"\n"))<CR>
 
 " normal modeで選択されたテキストを取得して、APIにリクエストを送信するmapping
 nnoremap <silent> <Leader>g :<C-u>call Gemininglishn()<CR>
