@@ -166,6 +166,7 @@ function! GeminiFuncHelp(ft, funcname)
 endfunction
 "}}}
 
+"{{{ mapping
 " visual modeで選択されたテキストを取得して、APIにリクエストを送信するmapping
 vnoremap <silent> <Leader>g :<C-u>call Gemininglishv()<CR>
 vnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, join(getregion(getpos("v"), getpos("'>")),"\n"))<CR>
@@ -177,3 +178,5 @@ nnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, expand('<cword>'))<CR
 
 ":gemini XXXでcall GeminiChat('XXX')を実行するmapping
 command! -nargs=1 Gemini call GeminiChat(<q-args>)
+"}}}
+```
