@@ -132,7 +132,7 @@ function! Gemininglishn()
 endfunction
 "}}}
 
-"{{{ function! GeminiFuncHelp()
+"{{{ function! GeminiFuncHelp(ft, funcname)
 " 引数はファイルタイプと関数名
 function! GeminiFuncHelp(ft, funcname)
 	" APIキー（環境変数から取得する場合）

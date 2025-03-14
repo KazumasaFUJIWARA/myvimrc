@@ -7,28 +7,27 @@
 
 このVim設定ファイルは、外部APIとの対話を行うためのカスタム関数とマッピングを提供します。この機能を使って、Vimエディタ内で直接、テキスト入力の処理や強化されたテキスト操作、分析を行うことができます。
 
-### 特徴
+### 定義している関数
 
-- **GeminiChat**: クエリを生成言語モデルAPIに送信し、Vim内でレスポンスを表示する関数。
-- **Gemininglish**: 選択されたテキストをAPIに送信し、JSON形式で要約レスポンスを受け取り、処理結果をVim内で直接操作する関数群。
+- GeminiFuncHelp(ft, funcname)
+ftはソースのファイルタイプで,
+ファイルタイプと関数名(実際は聞きたい箇所)
+を指定することで, Geminiに問い合わせる
 
-### 使用方法
+#### Key Bind
+##### visual mode
+- vnoremap <silent> <Leader>g :<C-u>call Gemininglishv()<CR>
+選択範囲の英語を翻訳
 
-以下のマッピングを利用して、各機能を活用できます。
+- vnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, join(getregion(getpos("v"), getpos("'>")),"\n"))<CR>
+選択範囲をfile type毎にGemeiniで問い合わせ
 
-- `GeminiChat` 関数を呼び出すためのコマンドマッピング: `:Gemini XXX`（`XXX`はクエリテキストです）。
-- 選択されたテキストをAPIに送信するためのビジュアルモードマッピング: `<Leader>g`。
+##### normal mode
+- nnoremap <silent> <Leader>g :<C-u>call Gemininglishn()<CR>
+カーソル上の単語の英語を翻訳
 
-### インストール方法
+- nnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, expand('<cword>'))<CR>
+カーソル上の単語をfile type毎にGeminiに問い合わせ
 
-1. この`gemini.vimrc`ファイルをあなたのVim設定フォルダに追加します。
-2. Vimを再起動するか、設定ファイルを再読込して変更を反映させます。
-
-この設定を使用するためには、環境変数`GEMINII`に適切なAPIキーを設定する必要があります。
-
-### 注意
-
-このスクリプトは外部APIとの通信を行います。利用規約を確認の上、注意して使用してください。
-
-このREADME.mdは、提供された`gemini.vimrc`ファイルの内容に基づいています。ファイルをダウンロードして、使用していただければ幸いです。
-
+##### command
+- command! -nargs=1 Gemini call GeminiChat(<q-args>)
