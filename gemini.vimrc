@@ -179,4 +179,3 @@ nnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, expand('<cword>'))<CR
 ":gemini XXXでcall GeminiChat('XXX')を実行するmapping
 command! -nargs=1 Gemini call GeminiChat(<q-args>)
 "}}}
-```
