@@ -132,9 +132,50 @@ function! Gemininglishn()
 endfunction
 "}}}
 
+"{{{ function! GeminiFuncHelp(ft, funcname)
+" 引数はファイルタイプと関数名
+function! GeminiFuncHelp(ft, funcname)
+	" APIキー（環境変数から取得する場合）
+	let api_key = $GEMINI
+
+	" API URL
+	let url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . api_key
+
+	" リクエストボディ
+	let body = '{"contents":'
+				\ . '[{"parts":[{'
+				\ . '"text": "I am dealing with a ' . a:ft . ' file. Please explain the usage of <' . a:funcname . '> shortly in Japanese.'
+				\ . '"}]}]}'
+
+	" リクエストヘッダ
+	let headers = ' -H "Content-Type: application/json"'
+
+	" リクエスト
+	let command = 'curl ' . url . headers . " -X POST -d '" . body ."' 2> /dev/null"
+
+	" レスポンス
+	let response = system(command)
+
+	" responseの\nを改行に変換
+	" 改行を表示するためには、\\nを\nに変換する必要がある
+	let response = substitute(response, '\\n', '\n', 'g')
+
+	" responseをJSONに変換
+	let json = json_decode(response)
+	echo json['candidates'][0]['content']['parts'][0]['text']
+endfunction
+"}}}
+
+"{{{ mapping
 " visual modeで選択されたテキストを取得して、APIにリクエストを送信するmapping
 vnoremap <silent> <Leader>g :<C-u>call Gemininglishv()<CR>
+vnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, join(getregion(getpos("v"), getpos("'>")),"\n"))<CR>
+
+" normal modeで選択されたテキストを取得して、APIにリクエストを送信するmapping
 nnoremap <silent> <Leader>g :<C-u>call Gemininglishn()<CR>
+nnoremap <silent> <Leader>h :<C-u>call GeminiFuncHelp(&ft, expand('<cword>'))<CR>
+
 
 ":gemini XXXでcall GeminiChat('XXX')を実行するmapping
 command! -nargs=1 Gemini call GeminiChat(<q-args>)
+"}}}
